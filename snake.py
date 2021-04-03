@@ -39,8 +39,7 @@ class cube():
             circleMiddle = (i*dis+centre-radius,j*dis+8)
             circleMiddle2 = (i*dis + dis -radius*2, j*dis+8)
             pygame.draw.circle(surface, (0,0,0), circleMiddle, radius)
-            pygame.draw.circle(surface, (0,0,0), circleMiddle2, radius)
-        
+            pygame.draw.circle(surface, (0,0,0), circleMiddle2, radius)    
 
 
 class snake():
@@ -122,30 +121,13 @@ class snake():
                 c.draw(surface)
 
 
-
 def redrawWindow():
     global win
     win.fill((0,0,0))
-    drawGrid(width, rows, win)
     s.draw(win)
     snack.draw(win)
     pygame.display.update()
     pass
-
-
-
-def drawGrid(w, rows, surface):
-    sizeBtwn = w // rows
-
-    x = 0
-    y = 0
-    for l in range(rows):
-        x = x + sizeBtwn
-        y = y +sizeBtwn
-
-        pygame.draw.line(surface, (255,255,255), (x, 0),(x,w))
-        pygame.draw.line(surface, (255,255,255), (0, y),(w,y))
-    
 
 
 def randomSnack(rows, item):
