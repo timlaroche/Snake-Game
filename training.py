@@ -24,7 +24,7 @@ def human_playing():
 def ai_playing():
 	env = snake_env.Snake_Env(server = True)
 	obs = env.reset()
-	model = PPO("CnnPolicy", env, verbose=2, learning_rate=5e-4)
+	model = PPO("CnnPolicy", env, verbose=2, learning_rate=5e-4, device="cuda:0")
 	model.learn(total_timesteps=1e7)
 	model.save("cnn_model")
 
