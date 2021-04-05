@@ -27,7 +27,7 @@ class Snake_Env(gym.Env):
     self.clock = pygame.time.Clock()
     self.action_space = spaces.Discrete(4)
     # self.observation_space = spaces.Box(low = 0, high = 255, shape = (100, 100, 3), dtype=np.uint8)
-    self.observation_space = spaces.Box(low = 0, high = 255, shape = (25, 25, 3), dtype=np.uint8)
+    self.observation_space = spaces.Box(low = 0, high = 255, shape = (50, 50, 3), dtype=np.uint8)
 
 
   def step(self, action):
@@ -92,7 +92,7 @@ class Snake_Env(gym.Env):
 
   def get_observation(self):
     surf = pygame.surfarray.array3d(pygame.display.get_surface())
-    return cv2.resize(surf, (25, 25)) # resize to 100x100
+    return cv2.resize(surf, (50, 50)) # resize to 100x100
     # return self.snack.pos
 
   def randomSnack(self, rows, item):
