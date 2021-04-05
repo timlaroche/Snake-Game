@@ -31,7 +31,7 @@ class Snake_Env(gym.Env):
 
 
   def step(self, action):
-    reward = 0
+    reward = 0.0
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)
@@ -39,19 +39,19 @@ class Snake_Env(gym.Env):
     if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
         # print("Score:", len(self.s.body))
         # self.s.reset((10, 10))
-        reward -= 1
+        reward -= 1.0
         self.flag = False
 
     if self.s.body[0].pos == self.snack.pos:
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
-        reward += 1
+        reward += 1.0
         
     for x in range(len(self.s.body)):
         if self.s.body[x].pos in list(map(lambda z:z.pos, self.s.body[x+1:])):
             # print("Score:", len(self.s.body))
             # self.s.reset((10,10))
-            reward -=1
+            reward -=1.0
             self.flag = False
             break
 
@@ -75,13 +75,13 @@ class Snake_Env(gym.Env):
 
                 for key in keys:
                     if keys[pygame.K_LEFT]:
-                      return 1
+                      return 0
                     elif keys[pygame.K_RIGHT]:
-                      return 2
+                      return 1
                     elif keys[pygame.K_UP]:
-                      return 3
+                      return 2
                     elif keys[pygame.K_DOWN]:
-                      return 4
+                      return 3
 
   def redrawWindow(self):
     self.win.fill((0,0,0))
@@ -150,19 +150,19 @@ class snake():
         self.dirny = 1
     
     def move(self, action):
-      if action == 1:
+      if action == 0:
           self.dirnx = -1
           self.dirny = 0
           self.turns[self.head.pos[:]] = [self.dirnx,self.dirny]
-      elif action == 2:
+      elif action == 1:
           self.dirnx = 1
           self.dirny = 0
           self.turns[self.head.pos[:]] = [self.dirnx,self.dirny]
-      elif action == 3:
+      elif action == 2:
           self.dirny = -1
           self.dirnx = 0
           self.turns[self.head.pos[:]] = [self.dirnx,self.dirny]
-      elif action == 4:
+      elif action == 3:
           self.dirny = 1
           self.dirnx = 0
           self.turns[self.head.pos[:]] = [self.dirnx,self.dirny]
