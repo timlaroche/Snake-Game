@@ -1,10 +1,12 @@
 from setuptools import setup
-import snake_env
+from snake_env import Snake_Env
 import gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import VecVideoRecorder, DummyVecEnv
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.env_checker import check_env
 
 def human_playing():
 	env = snake_env.Snake_Env(server=False)
@@ -23,10 +25,10 @@ def human_playing():
 		env.close()
 
 def ai_playing():
-	env = snake_env.Snake_Env(server = True)
-	env = Monitor(env, "training")
+	env = Snake_Env(server = True)
+	env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./vec")
 	obs = env.reset()
-	model = PPO("CnnPolicy", env, verbose=2, learning_rate=1e-4, device="cuda:0")
+	model = PPO("CnnPolicy", env, verbose=2, learning_rate=1e-5, device="cuda:0")
 	model.learn(total_timesteps=1e6)
 	model.save("cnn_model")
 
