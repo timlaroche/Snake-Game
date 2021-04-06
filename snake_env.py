@@ -38,20 +38,18 @@ class Snake_Env(gym.Env):
     headPos = self.s.head.pos
     if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
         # print("Score:", len(self.s.body))
-        # self.s.reset((10, 10))
-        reward -= 1
+        reward = -1
         self.flag = False
 
     if self.s.body[0].pos == self.snack.pos:
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
-        reward += 1
+        reward = 1
         
     for x in range(len(self.s.body)):
         if self.s.body[x].pos in list(map(lambda z:z.pos, self.s.body[x+1:])):
             # print("Score:", len(self.s.body))
-            # self.s.reset((10,10))
-            reward -=1
+            reward = -1
             self.flag = False
             break
 
