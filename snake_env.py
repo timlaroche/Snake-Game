@@ -40,6 +40,7 @@ class Snake_Env(gym.Env):
         return self.get_observation(), reward, not self.flag, {}
 
     if self.s.body[0].pos == self.snack.pos:
+        reward = 1
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
         return self.get_observation(), reward, not self.flag, {}
