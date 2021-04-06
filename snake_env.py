@@ -32,7 +32,7 @@ class Snake_Env(gym.Env):
 
 
   def step(self, action):
-    reward = 0
+    reward = -0.1 # being alive is not good
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)

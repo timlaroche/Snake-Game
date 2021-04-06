@@ -44,7 +44,7 @@ def ai_playing():
 
 def ai_eval():
 	env = Snake_Env(server = False)
-	model = PPO.load("./cnn_model_new_reward", env=env)
+	model = PPO.load("cnn_model_no_reward_alive_new_border", env=env)
 	obs = env.reset()
 	for i in range(1000):
 		action, _state = model.predict(obs, deterministic=True)
