@@ -28,28 +28,29 @@ class Snake_Env(gym.Env):
     self.action_space = spaces.Discrete(4)
     # self.observation_space = spaces.Box(low = 0, high = 255, shape = (100, 100, 3), dtype=np.uint8)
     self.observation_space = spaces.Box(low = 0, high = 255, shape = (80, 80, 3), dtype=np.uint8)
+    self.spacing = width//rows
 
 
   def step(self, action):
-    reward = 1
+    reward = 0
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)
     headPos = self.s.head.pos
     if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
         # print("Score:", len(self.s.body))
-        reward = -5
+        reward = -1
         self.flag = False
 
     if self.s.body[0].pos == self.snack.pos:
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
-        reward = 10
+        reward = 5
         
     for x in range(len(self.s.body)):
         if self.s.body[x].pos in list(map(lambda z:z.pos, self.s.body[x+1:])):
             # print("Score:", len(self.s.body))
-            reward = -5
+            reward = -1
             self.flag = False
             break
 
@@ -83,11 +84,25 @@ class Snake_Env(gym.Env):
                       return 3
 
   def redrawWindow(self):
-    self.win.fill((0,0,0))
+    pygame.draw.rect(self.win, (255, 255, 255), pygame.Rect(0,0,width,height))
+    pygame.draw.rect(self.win, (0,0,0), pygame.Rect(self.spacing,self.spacing, width-2*self.spacing, height-2*self.spacing))
     self.s.draw(self.win)
     self.snack.draw(self.win)
     pygame.display.update()
     pass
+
+  # def drawGrid(self, w, rows, surface):
+  #   sizeBtwn = w // rows
+
+  #   x = 0
+  #   y = 0
+  #   for l in range(rows):
+  #       x = x + sizeBtwn
+  #       y = y +sizeBtwn
+
+  #       pygame.draw.line(surface, (255,255,255), (x, 0),(x,w))
+  #       pygame.draw.line(surface, (255,255,255), (0, y),(w,y))
+      
 
   def get_observation(self):
     surf = pygame.surfarray.array3d(pygame.display.get_surface())
