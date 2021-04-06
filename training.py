@@ -7,6 +7,7 @@ from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.atari_wrappers import AtariWrapper
 
 def human_playing():
 	env = snake_env.Snake_Env(server=False)
@@ -26,7 +27,8 @@ def human_playing():
 
 def ai_playing():
 	env = Snake_Env(server = False)
-	env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./vec")
+	env = AtariWrapper(env, screen_size=80)
+	env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./atariwrapper")
 	obs = env.reset()
 	model = PPO("CnnPolicy", env, verbose=2, learning_rate=1e-5, device="cuda:0")
 	model.learn(total_timesteps=1e4)
