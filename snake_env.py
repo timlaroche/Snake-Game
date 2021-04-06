@@ -31,25 +31,25 @@ class Snake_Env(gym.Env):
 
 
   def step(self, action):
-    reward = 0
+    reward = 1
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)
     headPos = self.s.head.pos
     if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
         # print("Score:", len(self.s.body))
-        reward = -1
+        reward = -5
         self.flag = False
 
     if self.s.body[0].pos == self.snack.pos:
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
-        reward = 1
+        reward = 10
         
     for x in range(len(self.s.body)):
         if self.s.body[x].pos in list(map(lambda z:z.pos, self.s.body[x+1:])):
             # print("Score:", len(self.s.body))
-            reward = -1
+            reward = -5
             self.flag = False
             break
 

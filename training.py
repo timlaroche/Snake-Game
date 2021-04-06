@@ -41,4 +41,18 @@ def ai_playing():
 	# 	if done:
 	# 		env.reset()
 
+
+def ai_eval():
+	env = Snake_Env(server = False)
+	model = PPO.load("./cnn_model", env=env)
+	obs = env.reset()
+	for i in range(1000):
+		action, _state = model.predict(obs, deterministic=True)
+		#action = env.action_space.sample()
+		#print(action)
+		obs, reward, done, info = env.step(action)
+		env.render()
+		if done:
+			env.reset()
+
 ai_playing()
