@@ -25,7 +25,7 @@ def human_playing():
 		env.close()
 
 def ai_playing():
-	env = Snake_Env(server = False)
+	env = Snake_Env(server = True)
 	env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./vec")
 	obs = env.reset()
 	model = PPO("CnnPolicy", env, verbose=2, device="cuda:0")
