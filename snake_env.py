@@ -32,7 +32,7 @@ class Snake_Env(gym.Env):
 
 
   def step(self, action):
-    reward = -0.1 # being alive is not good
+    reward = 0 # being alive is not good
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)
@@ -45,7 +45,7 @@ class Snake_Env(gym.Env):
     if self.s.body[0].pos == self.snack.pos:
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
-        reward = 5
+        reward = 100
         
     for x in range(len(self.s.body)):
         if self.s.body[x].pos in list(map(lambda z:z.pos, self.s.body[x+1:])):

@@ -30,7 +30,7 @@ def ai_playing():
 	obs = env.reset()
 	model = PPO("CnnPolicy", env, verbose=2, device="cuda:0")
 	model.learn(total_timesteps=1e6)
-	model.save("cnn_model_no_reward_alive_new_border")
+	model.save("100reward")
 
 	# for i in range(1000):
 	# 	# action, _state = model.predict(obs, deterministic=True)
@@ -44,7 +44,7 @@ def ai_playing():
 
 def ai_eval():
 	env = Snake_Env(server = False)
-	model = PPO.load("cnn_model_no_reward_alive_new_border", env=env)
+	model = PPO.load("negativealive", env=env)
 	obs = env.reset()
 	for i in range(1000):
 		action, _state = model.predict(obs, deterministic=True)
@@ -56,3 +56,4 @@ def ai_eval():
 			env.reset()
 
 ai_playing()
+# ai_eval()
