@@ -25,12 +25,12 @@ def human_playing():
 		env.close()
 
 def ai_playing():
-	env = Snake_Env(server = True)
+	env = Snake_Env(server = False)
 	env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./vec")
 	obs = env.reset()
 	model = PPO("CnnPolicy", env, verbose=2, device="cuda:0")
 	model.learn(total_timesteps=1e6)
-	model.save("100reward")
+	model.save("positivereward")
 
 	# for i in range(1000):
 	# 	# action, _state = model.predict(obs, deterministic=True)

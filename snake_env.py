@@ -32,7 +32,7 @@ class Snake_Env(gym.Env):
 
 
   def step(self, action):
-    reward = 0 # being alive is not good
+    reward = 0.1 # better to be alive than dead
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)
@@ -106,6 +106,7 @@ class Snake_Env(gym.Env):
 
   def get_observation(self):
     surf = pygame.surfarray.array3d(pygame.display.get_surface())
+    # cv2.imwrite("image.png", cv2.resize(surf, (80, 80)))
     return cv2.resize(surf, (80, 80)) # resize to 100x100
     # return self.snack.pos
 
