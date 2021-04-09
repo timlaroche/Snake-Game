@@ -27,12 +27,13 @@ class Snake_Env(gym.Env):
     self.clock = pygame.time.Clock()
     self.action_space = spaces.Discrete(4)
     # self.observation_space = spaces.Box(low = 0, high = 255, shape = (100, 100, 3), dtype=np.uint8)
-    self.observation_space = spaces.Box(low = 0, high = 255, shape = (80, 80, 3), dtype=np.uint8)
+    self.observation_space = spaces.Box(low = 0, high = 255, shape = (80, 80, 1), dtype=np.uint8)
     self.spacing = width//rows
 
 
   def step(self, action):
-    reward = 0.1 # better to be alive than dead
+    print(f"selected action: {action}")
+    reward = 0.01 # better to be alive than dead
     # pygame.time.delay(50)
     # self.clock.tick(10)
     self.s.move(action)
@@ -45,7 +46,7 @@ class Snake_Env(gym.Env):
     if self.s.body[0].pos == self.snack.pos:
         self.s.addCube()
         self.snack = cube(self.randomSnack(rows,self.s), color=(0,255,0))
-        reward = 100
+        reward = 1
         
     for x in range(len(self.s.body)):
         if self.s.body[x].pos in list(map(lambda z:z.pos, self.s.body[x+1:])):
@@ -69,19 +70,19 @@ class Snake_Env(gym.Env):
 
   def get_actions(self):
     for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                keys = pygame.key.get_pressed()
-
-                for key in keys:
-                    if keys[pygame.K_LEFT]:
-                      return 0
-                    elif keys[pygame.K_RIGHT]:
-                      return 1
-                    elif keys[pygame.K_UP]:
-                      return 2
-                    elif keys[pygame.K_DOWN]:
-                      return 3
+      if event.type == pygame.QUIT:
+          pygame.quit()
+          sys.exit()
+      keys = pygame.key.get_pressed()
+      for key in keys:
+          if keys[pygame.K_LEFT]:
+            return 0
+          elif keys[pygame.K_RIGHT]:
+            return 1
+          elif keys[pygame.K_UP]:
+            return 2
+          elif keys[pygame.K_DOWN]:
+            return 3
 
   def redrawWindow(self):
     pygame.draw.rect(self.win, (255, 255, 255), pygame.Rect(0,0,width,height))
@@ -105,10 +106,16 @@ class Snake_Env(gym.Env):
       
 
   def get_observation(self):
+    # surf = pygame.surfarray.array3d(pygame.display.get_surface())
+    # # cv2.imwrite("image.png", cv2.resize(surf, (80, 80)))
+    # return cv2.resize(surf, (80, 80)) # resize to 100x100
+    # # return self.snack.pos
     surf = pygame.surfarray.array3d(pygame.display.get_surface())
-    # cv2.imwrite("image.png", cv2.resize(surf, (80, 80)))
-    return cv2.resize(surf, (80, 80)) # resize to 100x100
-    # return self.snack.pos
+    x = cv2.resize(surf, (80, 80)) # resize to 80x80
+    x = np.array(x, dtype=np.uint8)
+    x = cv2.cvtColor(x, cv2.COLOR_BGR2GRAY)
+    x = np.reshape(x, (80, 80, 1))
+    return x
 
   def randomSnack(self, rows, item):
       positions = item.body

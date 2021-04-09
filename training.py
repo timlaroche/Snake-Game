@@ -1,7 +1,7 @@
 from setuptools import setup
 from snake_env import Snake_Env
 import gym
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO, DQN
 from stable_baselines3.common.vec_env import VecVideoRecorder, DummyVecEnv
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.monitor import Monitor
@@ -9,7 +9,7 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.env_checker import check_env
 
 def human_playing():
-	env = snake_env.Snake_Env(server=False)
+	env = Snake_Env(server=False)
 	env.reset()
 	env.step(action=[])
 	while env.flag:
@@ -25,12 +25,13 @@ def human_playing():
 		env.close()
 
 def ai_playing():
-	env = Snake_Env(server = True)
-	env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./vec")
+	env = Snake_Env(server = False)
+	# env = make_vec_env(lambda: env, n_envs=4, monitor_dir="./vec")
+	env = Monitor(env, "1e7_bw_dqn")
 	obs = env.reset()
-	model = PPO("CnnPolicy", env, verbose=2, device="cuda:0")
-	model.learn(total_timesteps=1e6)
-	model.save("positivereward")
+	model = DQN("CnnPolicy", env, verbose=1, optimize_memory_usage=True, buffer_size = 500000)
+	model.learn(total_timesteps=1e7)
+	model.save("1e7_bw_dqn")
 
 	# for i in range(1000):
 	# 	# action, _state = model.predict(obs, deterministic=True)
@@ -44,7 +45,7 @@ def ai_playing():
 
 def ai_eval():
 	env = Snake_Env(server = False)
-	model = PPO.load("negativealive", env=env)
+	model = PPO.load("./positivereward", env=env)
 	obs = env.reset()
 	for i in range(1000):
 		action, _state = model.predict(obs, deterministic=True)
@@ -55,5 +56,6 @@ def ai_eval():
 		if done:
 			env.reset()
 
-ai_playing()
-# ai_eval()
+# human_playing()
+# ai_playing()
+ai_eval()
